@@ -362,5 +362,5 @@ MigrationBackup/
 
 # Rest of shit
 
-.sqlite
+*.sqlite
 config.json
