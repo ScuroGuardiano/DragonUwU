@@ -7,11 +7,11 @@ namespace DragonsUwU
 {
     class DragonService
     {
-        public void AddDragon(List<string> stringTags, string filePath)
+        public void AddDragon(List<string> stringTags, string fileName)
         {
             using(var db = new DragonContext()) {
                 List<Tag> tags = CreateTagListFromStringTags(db, stringTags);
-                var dragon = new Dragon() { FileName = filePath };
+                var dragon = new Dragon() { FileName = fileName };
                 List<DragonTag> dragonTags = CreateDragonTags(tags, dragon);
 
                 dragon.DragonTags = dragonTags;
@@ -22,7 +22,8 @@ namespace DragonsUwU
         /// <summary>
         /// Tries to find dragons by tags, if no dragons is found it will return empty list
         /// </summary>
-        public List<Dragon> FindDragons(List<string> stringTags) {
+        public List<Dragon> FindDragons(List<string> stringTags)
+        {
             using(var db = new DragonContext()) {
                 var tags = FindTags(db, stringTags);
                 var tagIds = tags.Select(t => t.Id);
@@ -36,6 +37,27 @@ namespace DragonsUwU
                     )
                     select dragon;
                 return query.ToList();
+            }
+        }
+        public Dragon FindRandomDragon(List<string> stringTags)
+        {
+            using(var db = new DragonContext()) {
+                var tags = FindTags(db, stringTags);
+                var tagIds = tags.Select(t => t.Id);
+
+                var dragonsMatchTags = 
+                    from dragon in db.Dragons
+                    where (
+                        (from dt in dragon.DragonTags
+                        where tagIds.Contains(dt.TagId)
+                        select dt).Count() == tagIds.Count()
+                    )
+                    select dragon;
+                
+                var rand = new Random();
+                int toSkip = rand.Next(0, dragonsMatchTags.Count());
+
+                return dragonsMatchTags.Skip(toSkip).Take(1).First();
             }
         }
 
