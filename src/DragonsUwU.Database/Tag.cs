@@ -5,6 +5,10 @@ namespace DragonsUwU.Database
 {
     class Tag
     {
+        public Tag() {}
+        public Tag(string stringTag) {
+            TagText = stringTag.ToLower();
+        }
         public int Id { get; set; }
 
         [Required]
