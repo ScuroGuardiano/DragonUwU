@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace DragonsUwU.Database {
     class DragonContext : DbContext
@@ -6,8 +8,13 @@ namespace DragonsUwU.Database {
         public DbSet<Dragon> Dragons { get; set; }
         public DbSet<Tag> Tags { get; set; }
 
+        public static readonly ILoggerFactory Logger
+            = LoggerFactory.Create(builder => builder.AddConsole());
+
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlite("Data Source=dragon.sqlite"); // TODO: Replace it with value from config
+            => options
+                //.UseLoggerFactory(Logger)
+                .UseSqlite("Data Source=dragon.sqlite"); // TODO: Replace it with value from config
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

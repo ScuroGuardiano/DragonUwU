@@ -7,6 +7,34 @@ namespace DragonsUwU
 {
     class DragonService
     {
+        /// <summary>
+        /// Tries to find dragons by tags, if no dragons is found it will return empty list
+        /// </summary>
+        public List<Dragon> FindDragons(List<string> stringTags)
+        {
+            using(var db = new DragonContext()) {
+                var dragonsMatchTags = GetQueryableDragonThatMatchTags(db, stringTags);
+                return dragonsMatchTags?.ToList() ?? new List<Dragon>();
+            }
+        }
+        public Dragon FindRandomDragon(List<string> stringTags)
+        {
+            using(var db = new DragonContext()) {
+                var dragonsMatchTags = GetQueryableDragonThatMatchTags(db, stringTags);
+                
+                if(dragonsMatchTags == null)
+                    return null;
+
+                int dragonsFound = dragonsMatchTags.Count();
+                if(dragonsFound == 0)
+                    return null;
+
+                var rand = new Random();
+                int toSkip = rand.Next(0, dragonsFound);
+
+                return dragonsMatchTags.Skip(toSkip).Take(1).First();
+            }
+        }
         public void AddDragon(List<string> stringTags, string fileName)
         {
             using(var db = new DragonContext()) {
@@ -18,62 +46,6 @@ namespace DragonsUwU
                 db.Add(dragon);
                 db.SaveChanges();
             }
-        }
-        /// <summary>
-        /// Tries to find dragons by tags, if no dragons is found it will return empty list
-        /// </summary>
-        public List<Dragon> FindDragons(List<string> stringTags)
-        {
-            using(var db = new DragonContext()) {
-                var tags = FindTags(db, stringTags);
-                var tagIds = tags.Select(t => t.Id);
-
-                var query = 
-                    from dragon in db.Dragons
-                    where (
-                        (from dt in dragon.DragonTags
-                        where tagIds.Contains(dt.TagId)
-                        select dt).Count() == tagIds.Count()
-                    )
-                    select dragon;
-                return query.ToList();
-            }
-        }
-        public Dragon FindRandomDragon(List<string> stringTags)
-        {
-            using(var db = new DragonContext()) {
-                var tags = FindTags(db, stringTags);
-                var tagIds = tags.Select(t => t.Id);
-
-                var dragonsMatchTags = 
-                    from dragon in db.Dragons
-                    where (
-                        (from dt in dragon.DragonTags
-                        where tagIds.Contains(dt.TagId)
-                        select dt).Count() == tagIds.Count()
-                    )
-                    select dragon;
-                
-                var rand = new Random();
-                int toSkip = rand.Next(0, dragonsMatchTags.Count());
-
-                return dragonsMatchTags.Skip(toSkip).Take(1).First();
-            }
-        }
-
-        /// <summary>
-        /// This one nice guy does not modify Database, will return Tags he will be able to find
-        /// </summary>
-        private List<Tag> FindTags(DragonContext db, List<string> stringTags) {
-            var tags = new List<Tag>();
-            stringTags.ForEach(t => {
-                try 
-                {
-                    tags.Add(db.Tags.Single(tag => tag.TagText == t.ToLower()));
-                }
-                catch {}
-            });
-            return tags;
         }
         /// <summary>
         /// If Tags are in Database it will load them, if one does not exists, it will create it  
@@ -99,6 +71,21 @@ namespace DragonsUwU
             });
 
             return tags;
+        }
+
+        private IQueryable<Dragon> GetQueryableDragonThatMatchTags(
+            DragonContext db,
+            List<string> stringTags
+        ) {
+            var query =
+                from dragon in db.Dragons
+                where (
+                    (from dt in dragon.DragonTags
+                     where stringTags.Contains(dt.Tag.TagText)
+                     select dt).Count() == stringTags.Count()
+                )
+                select dragon;
+            return query;
         }
 
         private List<DragonTag> CreateDragonTags(List<Tag> tags, Dragon dragon) {
