@@ -1,3 +1,4 @@
 {
-    "DiscordToken": "<your discord bot token>" 
+    "DiscordToken": "<your discord bot token>",
+    "ConnectionString": "Data Source=dragon.sqlite"
 }
