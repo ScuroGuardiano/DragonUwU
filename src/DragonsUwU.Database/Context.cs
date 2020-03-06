@@ -14,7 +14,7 @@ namespace DragonsUwU.Database {
         protected override void OnConfiguring(DbContextOptionsBuilder options)
             => options
                 //.UseLoggerFactory(Logger)
-                .UseSqlite("Data Source=dragon.sqlite"); // TODO: Replace it with value from config
+                .UseSqlite(DragonConfiguration.Config.ConnectionString);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

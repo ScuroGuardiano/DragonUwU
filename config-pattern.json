@@ -1,4 +1,9 @@
 {
     "DiscordToken": "<your discord bot token>",
-    "ConnectionString": "Data Source=dragon.sqlite"
+    "ConnectionString": "Data Source=dragon.sqlite",
+    "AdministratorsIds": [
+        "<Client ID of Administrator>",
+        "<Client ID of Administrator>",
+        "..."
+    ]
 }
