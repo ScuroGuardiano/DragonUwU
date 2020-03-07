@@ -7,6 +7,18 @@ namespace DragonsUwU
 {
     class DragonConfiguration
     {
+        [Required]
+        public string DiscordToken { get; set; }
+
+        [Required]
+        public string ConnectionString { get; set; }
+
+        [Required]
+        [MinLength(1)]
+        public List<ulong> AdministratorsIds { get; set; }
+        
+        public string CommandPrefix { get; set; } = "$$";
+
         static public DragonConfiguration Config { get; set; }
 
         static public void LoadConfiguration() {
@@ -19,14 +31,5 @@ namespace DragonsUwU
             Validator.ValidateObject(Config, new ValidationContext(Config), true);
         }
 
-        [Required]
-        public string DiscordToken { get; set; }
-
-        [Required]
-        public string ConnectionString { get; set; }
-
-        [Required]
-        [MinLength(1)]
-        public List<ulong> AdministratorsIds { get; set; }
     }
 }
