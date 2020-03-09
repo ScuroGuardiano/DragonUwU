@@ -26,6 +26,7 @@ namespace DragonsUwU
 
             client = new DiscordSocketClient(settings);
             client.Log += Log;
+            client.MessageReceived += OnMessageReceivedAsync;
         }
         public async Task SetThisShitUpAsync(string discordToken)
         {
@@ -56,7 +57,7 @@ namespace DragonsUwU
         }
 
         // Will take random Dragon that match tags
-        // Message format: $$tag1, tag2, tag3...
+        // Message format: $$tag1 tag2 tag3...
         private async Task ProcessTextChannelMessage(
             SocketMessage message, 
             SocketTextChannel channel
@@ -73,12 +74,27 @@ namespace DragonsUwU
         // If the message contains image and sender is bot administrator
         // It will Add new dragon with tags specified in message
         // If message contains only tags it will send random dragon ^^
-        // Prefix is not used here
+        // Prefix is not used here, so format is: tag1 tag2 tag3... and image in attachment
         private async Task ProcessDirectMessage(
             SocketMessage message,
             SocketDMChannel channel
         ) {
-            
+            List<Attachment> attachments = message.Attachments.ToList();
+            if(attachments.Count > 0)
+            {
+                if(administrators.Contains(message.Author.Id))
+                {
+                    if(message.Content.Trim() == "")
+                    {
+                        await channel.SendMessageAsync("You can't post dragon without tags");
+                        return;
+                    }
+                    List<string> tags = message.Content.Split(" ").ToList();
+                    Console.WriteLine(string.Join(" ", tags));
+                    Console.WriteLine(attachments[0].Url);
+                    //We can add fucking dragon here
+                }
+            }
         }
 
         private async Task SendRandomDragon(List<string> tags, ISocketMessageChannel channel)

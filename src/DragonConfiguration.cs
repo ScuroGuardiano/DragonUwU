@@ -15,9 +15,15 @@ namespace DragonsUwU
 
         [Required]
         [MinLength(1)]
-        public List<ulong> AdministratorsIds { get; set; }
+        public List<ulong> AdministratorIds { get; set; }
+
+        [Required]
+        [MinLength(1)]
+        public List<string> AllowedExtensions { get; set; }
         
         public string CommandPrefix { get; set; } = "$$";
+
+        public string DragonStoragePath { get; set; } = "./dragons";
 
         static public DragonConfiguration Config { get; set; }
 

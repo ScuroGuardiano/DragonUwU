@@ -1,10 +1,18 @@
 {
     "DiscordToken": "<your discord bot token>",
     "ConnectionString": "Data Source=dragon.sqlite",
-    "AdministratorsIds": [
+    "AdministratorIds": [
         "<Client ID of Administrator>",
         "<Client ID of Administrator>",
         "..."
     ],
-    "CommandPrefix": "$$"
+    "AllowedExtensions": [
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".bmp"
+    ],
+    "CommandPrefix": "$$",
+    "DragonStoragePath": "./dragons"
 }

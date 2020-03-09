@@ -2,19 +2,18 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Discord.WebSocket;
+using System.Threading.Tasks;
 
 namespace DragonsUwU
 {
     class Program
     {
-        static void Main(string[] arg) {
+        static async Task Main(string[] arg) {
             DragonConfiguration.LoadConfiguration();
+            var discordService = new DiscordService(DragonConfiguration.Config.AdministratorIds);
+            await discordService.SetThisShitUpAsync(DragonConfiguration.Config.DiscordToken);
 
-            var service = new DragonService();
-            //service.AddDragon(new List<string>{"dragon", "owo", "uwu"}, "acva.dragon");
-            //service.AddDragon(new List<string> { "dragon", "TwT", "uwu" }, "faf.dragon");
-            var dragon = service.FindDragons(new List<string> { "dragon", "owo" });
-            Console.WriteLine(dragon?.Count);
+            await Task.Delay(-1);
         }
     }
 }
