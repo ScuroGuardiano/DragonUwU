@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
 
-namespace DragonsUwU.Database
+namespace DragonsUwU.Database.Models
 {
     class Tag
     {

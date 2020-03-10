@@ -1,4 +1,4 @@
-namespace DragonsUwU.Database
+namespace DragonsUwU.Database.Models
 {
     class DragonTag
     {

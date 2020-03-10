@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using DragonsUwU.Database.Models;
 
 namespace DragonsUwU.Database {
     class DragonContext : DbContext

@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System;
-using DragonsUwU.Database;
+using DragonsUwU.Database.Models;
 
-namespace DragonsUwU
+namespace DragonsUwU.Database.Services
 {
     class DragonService
     {

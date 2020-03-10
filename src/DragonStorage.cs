@@ -26,13 +26,11 @@ namespace DragonsUwU
             using(var webClient = new WebClient())
             {
                 string extension = Path.GetExtension(url);
-                
                 if(!IsExtensionLegit(extension))
                     return null;
 
                 string filename = GenerateFilename(extension);
                 string pathToSave = Path.Join(storagePath, filename);
-
                 try
                 {
                     await webClient.DownloadFileTaskAsync(url, pathToSave);

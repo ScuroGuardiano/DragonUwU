@@ -13,12 +13,10 @@ namespace DragonsUwU
 
         private DiscordSocketClient client;
         private List<ulong> administrators;
-        private DragonService dragonService;
 
         public DiscordService(List<ulong> administrators)
         {
             this.administrators = administrators;
-            dragonService = new DragonService();
 
             var settings = new DiscordSocketConfig {
                 LogLevel = LogSeverity.Info
