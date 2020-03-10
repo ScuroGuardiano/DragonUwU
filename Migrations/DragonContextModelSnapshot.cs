@@ -15,7 +15,7 @@ namespace DragonsUwU.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "3.1.2");
 
-            modelBuilder.Entity("DragonsUwU.Database.Dragon", b =>
+            modelBuilder.Entity("DragonsUwU.Database.Models.Dragon", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,7 +31,7 @@ namespace DragonsUwU.Migrations
                     b.ToTable("Dragons");
                 });
 
-            modelBuilder.Entity("DragonsUwU.Database.DragonTag", b =>
+            modelBuilder.Entity("DragonsUwU.Database.Models.DragonTag", b =>
                 {
                     b.Property<int>("DragonId")
                         .HasColumnType("INTEGER");
@@ -46,7 +46,7 @@ namespace DragonsUwU.Migrations
                     b.ToTable("DragonTag");
                 });
 
-            modelBuilder.Entity("DragonsUwU.Database.Tag", b =>
+            modelBuilder.Entity("DragonsUwU.Database.Models.Tag", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,15 +62,15 @@ namespace DragonsUwU.Migrations
                     b.ToTable("Tags");
                 });
 
-            modelBuilder.Entity("DragonsUwU.Database.DragonTag", b =>
+            modelBuilder.Entity("DragonsUwU.Database.Models.DragonTag", b =>
                 {
-                    b.HasOne("DragonsUwU.Database.Dragon", "Dragon")
+                    b.HasOne("DragonsUwU.Database.Models.Dragon", "Dragon")
                         .WithMany("DragonTags")
                         .HasForeignKey("DragonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DragonsUwU.Database.Tag", "Tag")
+                    b.HasOne("DragonsUwU.Database.Models.Tag", "Tag")
                         .WithMany("DragonTags")
                         .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade)

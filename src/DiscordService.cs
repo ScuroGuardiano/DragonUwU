@@ -13,10 +13,12 @@ namespace DragonsUwU
 
         private DiscordSocketClient client;
         private List<ulong> administrators;
+        private DragonManager dragonManager;
 
-        public DiscordService(List<ulong> administrators)
+        public DiscordService(List<ulong> administrators, DragonManager dragonManager)
         {
             this.administrators = administrators;
+            this.dragonManager = dragonManager;
 
             var settings = new DiscordSocketConfig {
                 LogLevel = LogSeverity.Info
@@ -84,14 +86,26 @@ namespace DragonsUwU
                 {
                     if(message.Content.Trim() == "")
                     {
-                        await channel.SendMessageAsync("You can't post dragon without tags");
+                        await channel.SendMessageAsync("You can't add Dragon without tags");
                         return;
                     }
                     List<string> tags = message.Content.Split(" ").ToList();
-                    Console.WriteLine(string.Join(" ", tags));
-                    Console.WriteLine(attachments[0].Url);
-                    //We can add fucking dragon here
+                    bool success = await dragonManager.AddDragonAsync(tags, attachments[0].Url);
+                    if(success)
+                    {
+                        await channel.SendMessageAsync("Dragon added successfully owo");
+                        return;
+                    }
+                    await channel.SendMessageAsync("Couldn't add Dragon, something failed :c");
                 }
+                // If user is not administrator we won't show any message
+                // Why would we want to tell him that he can do it? ^^
+                // #security-through-obscurity
+            }
+            else
+            {
+                List<string> tags = message.Content.Split(" ").ToList();
+                await SendRandomDragon(tags, channel);
             }
         }
 

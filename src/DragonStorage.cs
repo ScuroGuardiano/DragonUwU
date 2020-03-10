@@ -21,14 +21,17 @@ namespace DragonsUwU
         /// It will download Dragon, if succeed will return filename  
         /// Otherwise will return null
         /// </summary>
-        public async Task<string> DownloadDragon(string url)
+        public async Task<string> DownloadDragonAsync(string url)
         {
             using(var webClient = new WebClient())
             {
                 string extension = Path.GetExtension(url);
                 if(!IsExtensionLegit(extension))
                     return null;
-
+                if(!Directory.Exists(storagePath))
+                {
+                    Directory.CreateDirectory(storagePath);
+                }
                 string filename = GenerateFilename(extension);
                 string pathToSave = Path.Join(storagePath, filename);
                 try
@@ -45,8 +48,8 @@ namespace DragonsUwU
 
         private string GenerateFilename(string extension)
         {
-            long time = DateTime.Now.Millisecond;
-            return $"DRAGON_{time}{extension}";
+            double time = (DateTime.Now - new DateTime(1970, 1, 1)).TotalMilliseconds;
+            return $"DRAGON_{time.ToString().Replace(',', '_')}{extension}";
         }
         private bool IsExtensionLegit(string extension)
         {

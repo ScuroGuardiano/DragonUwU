@@ -12,10 +12,16 @@ namespace DragonsUwU.Database {
         public static readonly ILoggerFactory Logger
             = LoggerFactory.Create(builder => builder.AddConsole());
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options
-                //.UseLoggerFactory(Logger)
+        protected override void OnConfiguring(DbContextOptionsBuilder options) {
+            if(DragonConfiguration.Config == null)
+            {
+                DragonConfiguration.LoadConfiguration(); // Needed for Entity Framework to generate migrations and update db
+            }
+            options
                 .UseSqlite(DragonConfiguration.Config.ConnectionString);
+        }
+
+                //.UseLoggerFactory(Logger)
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
