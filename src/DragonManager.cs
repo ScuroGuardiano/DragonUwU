@@ -20,7 +20,7 @@ namespace DragonsUwU
             string filename = await dragonStorage.DownloadDragonAsync(url);
             if(filename == null)
                 return false;
-            dragonService.AddDragon(tags, filename);
+            await dragonService.AddDragonAsync(tags, filename);
             return true;
         }
         
@@ -30,7 +30,7 @@ namespace DragonsUwU
         /// </summary>
         public async Task<string> GetRandomDragonByTagsAsync(List<string> tags)
         {
-            var dragon = dragonService.FindRandomDragon(tags);
+            var dragon = await dragonService.FindRandomDragonAsync(tags);
             if(dragon == null)
                 return null;
             string dragonPath = dragonStorage.GetFullDragonPath(dragon.Filename);

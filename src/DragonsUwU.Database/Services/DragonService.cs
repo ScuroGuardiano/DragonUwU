@@ -1,6 +1,8 @@
-using System.Collections.Generic;
-using System.Linq;
 using System;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using DragonsUwU.Database.Models;
 
 namespace DragonsUwU.Database.Services
@@ -10,14 +12,14 @@ namespace DragonsUwU.Database.Services
         /// <summary>
         /// Tries to find dragons by tags, if no dragons is found it will return empty list
         /// </summary>
-        public List<Dragon> FindDragons(List<string> stringTags)
+        public async Task<List<Dragon>> FindDragonsAsync(List<string> stringTags)
         {
             using(var db = new DragonContext()) {
                 var dragonsMatchTags = GetQueryableDragonThatMatchTags(db, stringTags);
-                return dragonsMatchTags?.ToList() ?? new List<Dragon>();
+                return await dragonsMatchTags?.ToListAsync() ?? new List<Dragon>();
             }
         }
-        public Dragon FindRandomDragon(List<string> stringTags)
+        public async Task<Dragon> FindRandomDragonAsync(List<string> stringTags)
         {
             using(var db = new DragonContext()) {
                 var dragonsMatchTags = GetQueryableDragonThatMatchTags(db, stringTags);
@@ -25,52 +27,59 @@ namespace DragonsUwU.Database.Services
                 if(dragonsMatchTags == null)
                     return null;
 
-                int dragonsFound = dragonsMatchTags.Count();
+                int dragonsFound = await dragonsMatchTags.CountAsync();
                 if(dragonsFound == 0)
                     return null;
 
                 var rand = new Random();
                 int toSkip = rand.Next(0, dragonsFound);
 
-                return dragonsMatchTags.Skip(toSkip).Take(1).First();
+                return await dragonsMatchTags.Skip(toSkip).Take(1).FirstAsync();
             }
         }
-        public void AddDragon(List<string> stringTags, string fileName)
+        public async Task AddDragonAsync(List<string> stringTags, string fileName)
         {
             using(var db = new DragonContext()) {
-                List<Tag> tags = CreateTagListFromStringTags(db, stringTags);
+                List<Tag> tags = await CreateTagListFromStringTagsAsync(db, stringTags);
                 var dragon = new Dragon() { Filename = fileName };
                 List<DragonTag> dragonTags = CreateDragonTags(tags, dragon);
 
                 dragon.DragonTags = dragonTags;
-                db.Add(dragon);
-                db.SaveChanges();
+                await db.AddAsync(dragon);
+                await db.SaveChangesAsync();
             }
         }
         /// <summary>
         /// If Tags are in Database it will load them, if one does not exists, it will create it  
-        /// This one boii can modify Database
+        /// This one boii can modify Database, but doesn't save changes
         /// </summary>
-        private List<Tag> CreateTagListFromStringTags(DragonContext db, List<string> stringTags)
+        private async Task<List<Tag>> CreateTagListFromStringTagsAsync(DragonContext db, List<string> stringTags)
         {
-            var tags = new List<Tag>();
+            var lowerStringTags = stringTags.ConvertAll(st => st.ToLower());
+            // Here we will have tags that exists in database
+            List<Tag> tagsFound = await 
+            (
+                from t in db.Tags
+                where lowerStringTags.Contains(t.TagText)
+                select t
+            ).ToListAsync();
 
-            stringTags.ForEach(el => {
-                try
-                {
-                    var tag = db.Tags.Single(t => t.TagText == el.ToLower());
-                    tags.Add(tag);
-                }
-                catch(System.InvalidOperationException) {
-                    //Tag not exist, we must create it and add to Database
-                    var tag = new Tag(el);
-                    db.Add(tag);
-                    db.SaveChanges();
-                    tags.Add(tag);
-                }
-            });
+            if(tagsFound.Count == stringTags.Count) 
+                return tagsFound; // If we found all tags, we don't need to create missing
+            
+            // Okey, we need to add some tags, let's go with this shit
+            List<string> tagsTextFound = tagsFound.ConvertAll(t => t.TagText);
+            List<string> missingTags = 
+            (
+                from st in lowerStringTags
+                where tagsTextFound.Contains(st) == false
+                select st
+            ).ToList();
 
-            return tags;
+            List<Tag> tagsToAdd = missingTags.ConvertAll(mt => new Tag(mt));
+            await db.AddRangeAsync(tagsToAdd);
+
+            return tagsFound.Concat(tagsToAdd).ToList();
         }
 
         private IQueryable<Dragon> GetQueryableDragonThatMatchTags(
