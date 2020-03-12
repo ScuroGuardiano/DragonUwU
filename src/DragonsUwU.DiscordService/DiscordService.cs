@@ -65,9 +65,10 @@ namespace DragonsUwU.DiscordService
             if(!message.Content.StartsWith(CommandPrefix))
                 return;
 
-            List<string> tags = new List<string>(message.Content.Split(","));
-            tags = tags.ConvertAll(el => el.Trim());
-
+            List<string> tags = message.Content
+                    .Substring(CommandPrefix.Length)
+                    .Split(" ")
+                    .ToList();
             await SendRandomDragon(tags, channel);
         }
 
