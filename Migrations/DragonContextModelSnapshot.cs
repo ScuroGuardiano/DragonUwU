@@ -21,7 +21,7 @@ namespace DragonsUwU.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Filename")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(255);

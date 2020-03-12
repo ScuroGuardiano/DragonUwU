@@ -4,7 +4,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
-namespace DragonsUwU
+namespace DragonsUwU.Storage
 {
     class DragonStorage
     {
@@ -17,6 +17,10 @@ namespace DragonsUwU
             this.allowedExtensions = allowedExtensions;
         }
 
+        public string GetFullDragonPath(string filename)
+        {
+            return Path.Join(storagePath, filename);
+        }
         /// <summary>
         /// It will download Dragon, if succeed will return filename  
         /// Otherwise will return null

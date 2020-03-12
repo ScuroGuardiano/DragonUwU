@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.Configuration;
-using Discord.WebSocket;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using DragonsUwU.DiscordService;
+using DragonsUwU.Storage;
 
 namespace DragonsUwU
 {
@@ -16,7 +14,7 @@ namespace DragonsUwU
             var dragonStorage = new DragonStorage(config.DragonStoragePath, config.AllowedExtensions);
             var dragonManager = new DragonManager(dragonService, dragonStorage);
 
-            var discordService = new DiscordService(config.AdministratorIds, dragonManager);
+            var discordService = new DiscordBot(config.AdministratorIds, dragonManager);
             await discordService.SetThisShitUpAsync(DragonConfiguration.Config.DiscordToken);
 
             await Task.Delay(-1);

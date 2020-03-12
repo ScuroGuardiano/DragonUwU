@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DragonsUwU.Migrations
 {
     [DbContext(typeof(DragonContext))]
-    [Migration("20200310045959_InitialCreate")]
+    [Migration("20200312013123_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,7 +23,7 @@ namespace DragonsUwU.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("FileName")
+                    b.Property<string>("Filename")
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasMaxLength(255);

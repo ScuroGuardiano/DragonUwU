@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using Discord;
 using Discord.WebSocket;
 
-namespace DragonsUwU
+namespace DragonsUwU.DiscordService
 {
-    class DiscordService
+    class DiscordBot
     {
         public string CommandPrefix { get; set; } = "$$";
 
@@ -15,7 +15,7 @@ namespace DragonsUwU
         private List<ulong> administrators;
         private DragonManager dragonManager;
 
-        public DiscordService(List<ulong> administrators, DragonManager dragonManager)
+        public DiscordBot(List<ulong> administrators, DragonManager dragonManager)
         {
             this.administrators = administrators;
             this.dragonManager = dragonManager;
@@ -111,7 +111,13 @@ namespace DragonsUwU
 
         private async Task SendRandomDragon(List<string> tags, ISocketMessageChannel channel)
         {
-            await channel.SendMessageAsync("Shit not implemented yet");
+            string dragonPath = await dragonManager.GetRandomDragonByTagsAsync(tags);
+            if(dragonPath == null)
+            {
+                await channel.SendMessageAsync("Didn't found any one Dragon that match tags :c Try different or less tags");
+                return;
+            }
+            await channel.SendFileAsync(dragonPath, "owo");
         }
     }
 }

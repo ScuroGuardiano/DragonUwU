@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DragonsUwU.Database.Services;
+using DragonsUwU.Storage;
 
 namespace DragonsUwU
 {
@@ -21,6 +22,19 @@ namespace DragonsUwU
                 return false;
             dragonService.AddDragon(tags, filename);
             return true;
+        }
+        
+        /// <summary>
+        /// Will return file path to Dragon if there's at least one Dragon that match tags  
+        /// Otherwise it will return null
+        /// </summary>
+        public async Task<string> GetRandomDragonByTagsAsync(List<string> tags)
+        {
+            var dragon = dragonService.FindRandomDragon(tags);
+            if(dragon == null)
+                return null;
+            string dragonPath = dragonStorage.GetFullDragonPath(dragon.Filename);
+            return dragonPath;
         }
     }
 }

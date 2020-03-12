@@ -12,7 +12,7 @@ namespace DragonsUwU.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    FileName = table.Column<string>(maxLength: 255, nullable: false)
+                    Filename = table.Column<string>(maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {

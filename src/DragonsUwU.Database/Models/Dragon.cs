@@ -9,7 +9,7 @@ namespace DragonsUwU.Database.Models
 
         [Required]
         [MaxLength(255)]
-        public string FileName { get; set; }
+        public string Filename { get; set; }
 
         public List<DragonTag> DragonTags { get; set; }
     }

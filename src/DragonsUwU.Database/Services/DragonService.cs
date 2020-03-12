@@ -39,7 +39,7 @@ namespace DragonsUwU.Database.Services
         {
             using(var db = new DragonContext()) {
                 List<Tag> tags = CreateTagListFromStringTags(db, stringTags);
-                var dragon = new Dragon() { FileName = fileName };
+                var dragon = new Dragon() { Filename = fileName };
                 List<DragonTag> dragonTags = CreateDragonTags(tags, dragon);
 
                 dragon.DragonTags = dragonTags;
