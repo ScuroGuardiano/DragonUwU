@@ -72,18 +72,19 @@ namespace DragonsUwU.DiscordService
             await SendRandomDragon(tags, channel);
         }
 
-        // If the message contains image and sender is bot administrator
+        // If the message contains image or image url and sender is bot administrator
         // It will Add new dragon with tags specified in message
         // If message contains only tags it will send random dragon ^^
         // Prefix is not used here, so format is: tag1 tag2 tag3... and image in attachment
+        // or tag1 tag2 tag3 http://<url> https://<url>
         private async Task ProcessDirectMessage(
             SocketMessage message,
             SocketDMChannel channel
         ) {
-            List<Attachment> attachments = message.Attachments.ToList();
-            if(attachments.Count > 0)
+            if(administrators.Contains(message.Author.Id))
             {
-                if(administrators.Contains(message.Author.Id))
+                List<Attachment> attachments = message.Attachments.ToList();
+                if(attachments.Count > 0)
                 {
                     if(message.Content.Trim() == "")
                     {
@@ -91,19 +92,27 @@ namespace DragonsUwU.DiscordService
                         return;
                     }
                     List<string> tags = message.Content.Split(" ").ToList();
-                    bool success = await dragonManager.AddDragonAsync(tags, attachments[0].Url);
-                    if(success)
+                    await AddDragonAsync(tags, attachments[0].Url, channel);
+                    return;
+                }
+                else
+                {
+                    List<string> splitted = message.Content.Split(" ").ToList();
+                    if(splitted.Last().StartsWith("http://") || splitted.Last().StartsWith("https://"))
                     {
-                        await channel.SendMessageAsync("Dragon added successfully owo");
+                        if(splitted.Count < 2)
+                        {
+                            await channel.SendMessageAsync("You can't add Dragon without tags");
+                            return;
+                        }
+                        string url = splitted.Last();
+                        List<string> tags = splitted.SkipLast(1).ToList();
+                        await AddDragonAsync(tags, url, channel);
                         return;
                     }
-                    await channel.SendMessageAsync("Couldn't add Dragon, something failed :c");
                 }
-                // If user is not administrator we won't show any message
-                // Why would we want to tell him that he can do it? ^^
-                // #security-through-obscurity
             }
-            else
+
             {
                 List<string> tags = message.Content.Split(" ").ToList();
                 await SendRandomDragon(tags, channel);
@@ -119,6 +128,16 @@ namespace DragonsUwU.DiscordService
                 return;
             }
             await channel.SendFileAsync(dragonPath, "owo");
+        }
+        private async Task AddDragonAsync(List<string> tags, string url, ISocketMessageChannel channel)
+        {
+            bool success = await dragonManager.AddDragonAsync(tags, url);
+            if (success)
+            {
+                await channel.SendMessageAsync("Dragon added successfully owo");
+                return;
+            }
+            await channel.SendMessageAsync("Couldn't add Dragon, something failed :c");
         }
     }
 }

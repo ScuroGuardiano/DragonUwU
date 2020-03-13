@@ -9,8 +9,9 @@ Okey bot is now workable, but yet so much to do ^^
 Just use ```$$tag``` or multiple tags ```$$tag1 tag2 tag3``` on text channel on Discord. If you DM to bot ommit command prefix.
 
 ### Adding Images
-If your discord client id is in AdministratorIds in config.json you can add images. To do it you just go to Direct Message with bot, send image and in message you type tags  
-> Unfortunately there's one issue... Discord won't allow you to send some nsfw images to bot, so... You can't add them that way... BUT! Don't you worry, I am currently working on better method of adding images!
+If your discord client id is in AdministratorIds in config.json you can add images. To do it you just go to Direct Message with bot, send image and in message you type tags OR type tags and at the end type url to image with http:// or https:// prefix, example  
+```meme cats https://<rest-of-url>```
+> Unfortunately there's one issue... Discord won't allow you to send some nsfw images to bot, so... You can't add them that way... BUT! You can send just url to an image ^^
 
 ### How to run this shit?
 1. Install dotnet core
