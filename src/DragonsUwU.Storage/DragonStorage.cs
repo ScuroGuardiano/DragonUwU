@@ -29,7 +29,7 @@ namespace DragonsUwU.Storage
         {
             using(var webClient = new WebClient())
             {
-                string extension = Path.GetExtension(url);
+                string extension = Path.GetExtension(url.Split("?")[0]);
                 if(!IsExtensionLegit(extension))
                     return null;
                 if(!Directory.Exists(storagePath))
