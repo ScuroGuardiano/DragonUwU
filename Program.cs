@@ -15,6 +15,7 @@ namespace DragonsUwU
             var dragonManager = new DragonManager(dragonService, dragonStorage);
 
             var discordService = new DiscordBot(config.AdministratorIds, dragonManager);
+            discordService.CommandPrefix = config.CommandPrefix;
             await discordService.SetThisShitUpAsync(DragonConfiguration.Config.DiscordToken);
 
             await Task.Delay(-1);

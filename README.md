@@ -26,11 +26,12 @@ If your discord client id is in AdministratorIds in config.json you can add imag
 1. Install dotnet core
 2. Install ef tools: ```dotnet tool install --global dotnet-ef```
 3. Clone this repo ;)
-4. Restore all needed packages: ```nuget restore```
+4. Restore all needed packages: ```dotnet restore```
 5. Update database: ```dotnet ef database update```
 6. Change config-pattern.json to config.json and update your settings
 7. Run this shit: ```dotnet run```
 
+All shit was written in Visual Studio Code, if you want use Visual Studio you should know which commands to use ^^
 ---
 
 # LICENSE
