@@ -5,7 +5,7 @@ using DragonsUwU.Storage;
 
 namespace DragonsUwU
 {
-    class DragonManager
+    class DragonManager : DiscordService.IDiscordDragonManager
     {
         private DragonService dragonService;
         private DragonStorage dragonStorage;

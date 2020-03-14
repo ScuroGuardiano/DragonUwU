@@ -13,9 +13,9 @@ namespace DragonsUwU.DiscordService
 
         private DiscordSocketClient client;
         private List<ulong> administrators;
-        private DragonManager dragonManager;
+        private IDiscordDragonManager dragonManager;
 
-        public DiscordBot(List<ulong> administrators, DragonManager dragonManager)
+        public DiscordBot(List<ulong> administrators, IDiscordDragonManager dragonManager)
         {
             this.administrators = administrators;
             this.dragonManager = dragonManager;
